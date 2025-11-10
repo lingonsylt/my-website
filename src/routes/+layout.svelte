@@ -1,6 +1,6 @@
 <script>
 	import favicon from '$lib/assets/favicon.svg';
-	import { base, resolve } from '$app/paths';
+	import { resolve } from '$app/paths';
 
 	let { children } = $props();
 
@@ -26,7 +26,7 @@
 
 <nav>
 	{#each links as link (link.path)}
-		<a class="nav-link" href={resolve(base + link.path)}>{link.name}</a>
+		<a class="nav-link" href={resolve(link.path)}>{link.name}</a>
 	{/each}
 </nav>
 
