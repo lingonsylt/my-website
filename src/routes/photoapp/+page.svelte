@@ -12,7 +12,7 @@
 <div class="photos">
 	{#each images as image, i (image)}
 		<div class="img-wrap">
-			<img src={image} alt="Photo {i + 1}" />
+			<img src={image} alt="Photo {i + 1}" draggable="false" />
 		</div>
 	{/each}
 </div>
@@ -24,9 +24,8 @@
 		justify-content: center;
 		flex-wrap: wrap;
 		border-radius: 30px;
-		margin: 20px;
+		margin: 50px;
 		padding: 10px;
-		max-width: 90vw;
 		background: gainsboro;
 	}
 	.img-wrap img {
@@ -40,9 +39,11 @@
 	.img-wrap {
 		flex-grow: 1;
 		flex-basis: 300px;
-		height: 20vw;
+		height: 40vh;
 		margin: 10px;
-		transition: flex-grow 0.5s;
+		transition:
+			flex-grow 0.5s ease,
+			transform 0.2s ease;
 	}
 	.img-wrap:hover {
 		flex-grow: 2;
