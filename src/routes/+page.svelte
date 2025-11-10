@@ -1,7 +1,7 @@
 <!--Delar upp sidan i två delar-->
 <main>
 	<div>
-		<h1 class="name">Namn efternamn</h1>
+		<h1 class="name">Morgan Kemppe</h1>
 		<h2>
 			Här har jag samlat min uppgifter jag gjort i samband med webbutveckling i årskurs 2 på Maja
 			Beskowgymnasiet!
