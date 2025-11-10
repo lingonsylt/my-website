@@ -56,4 +56,7 @@
 		margin: 20px;
 		color: mediumseagreen;
 	}
+	p {
+		text-align: center;
+	}
 </style>
