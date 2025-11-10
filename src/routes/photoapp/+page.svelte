@@ -1,35 +1,59 @@
 <script>
-	/** @type {import('./$types').PageProps} */
-	let { data } = $props();
+	let images = [
+		'https://picsum.photos/id/70/367/267',
+		'https://picsum.photos/id/88/367/267',
+		'https://picsum.photos/id/93/367/267'
+	];
 </script>
 
 <h1>Photoapp</h1>
 <p>Denna sida innehåller <strong>fina</strong> bilder</p>
 
 <div class="photos">
-	<div class="img-wrap">
-		<img src="https://i.redd.it/rofzm44oka091.png" alt="Flexbox egenskaper" />
-	</div>
-	<div class="img-wrap">
-		<img src="https://i.redd.it/vd9dc7wfk9471.png" alt="Flexbok fuskblad" />
-	</div>
-	<div class="img-wrap">
-		<img src="https://miro.medium.com/v2/resize:fit:1400/0*YeaUsQyhXSL1TCTH.png" alt="Fle" />
-	</div>
+	{#each images as image, i (image)}
+		<div class="img-wrap">
+			<img src={image} alt="Photo {i + 1}" />
+		</div>
+	{/each}
 </div>
 
 <style>
 	.photos {
 		display: flex;
-		max-width: 90vw;
 		overflow: hidden;
-		align-items: center;
 		justify-content: center;
+		flex-wrap: wrap;
+		border-radius: 30px;
+		margin: 20px;
+		padding: 10px;
+		max-width: 90vw;
+		background: gainsboro;
 	}
 	.img-wrap img {
 		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		border-radius: 20px;
+		border: 2px solid white;
+		box-shadow: 4px 8px 10px rgba(0, 0, 0, 0.2);
 	}
 	.img-wrap {
-		flex: 1;
+		flex-grow: 1;
+		flex-basis: 300px;
+		height: 20vw;
+		margin: 10px;
+		transition: flex-grow 0.5s;
+	}
+	.img-wrap:hover {
+		flex-grow: 2;
+	}
+	.img-wrap:active {
+		transform: scale(0.9);
+	}
+	h1 {
+		text-align: center;
+		font-size: 50px;
+		margin: 20px;
+		color: mediumseagreen;
 	}
 </style>
