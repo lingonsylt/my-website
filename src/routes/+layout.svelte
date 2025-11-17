@@ -14,8 +14,12 @@
 			path: '/photoapp'
 		},
 		{
-			name: 'Register',
+			name: 'Registera',
 			path: '/register'
+		},
+		{
+			name: 'Logga in',
+			path: '/login'
 		}
 	];
 </script>
@@ -64,6 +68,9 @@
 	nav {
 		background: gainsboro;
 		padding: 5px;
+		position: fixed;
+		top: 0;
+		width: 100%;
 	}
 	.nav-link {
 		margin: 5px;

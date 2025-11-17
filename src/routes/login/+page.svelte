@@ -39,15 +39,11 @@
 
 <main>
 	<div class="container">
-		<h1>Registrering</h1>
+		<h1>Inlogging</h1>
 		<form onsubmit={handleSubmit}>
 			<div
 				style="width: 100px; height: 100px; border-radius: 50%; overflow:hidden; background-color:{color};"
 			></div>
-			<div>
-				<label for="name">Namn:</label>
-				<input bind:value={name} type="text" id="name" />
-			</div>
 			<div>
 				<label for="email">E-post:</label>
 				<input bind:value={email} type="email" id="email" />
@@ -56,17 +52,9 @@
 				<label for="password">Lösenord:</label>
 				<input bind:value={password} type="password" id="password" />
 			</div>
-			<div>
-				<label for="color">Favoritfärg</label>
-				<select bind:value={color} onclick={shuffleColors} name="color" id="color">
-					{#each colors as color (color.name)}
-						<option value={color.value}>{color.name}</option>
-					{/each}
-				</select>
-			</div>
-			<input type="submit" value="Registrera" />
+			<input type="submit" value="Logga in" />
 		</form>
-		<p>Har du redan ett konto? <a href={resolve('/login')}>Logga in</a></p>
+		<p>Har du inget konto? <a href={resolve('/register')}>Registrera</a></p>
 	</div>
 </main>
 
