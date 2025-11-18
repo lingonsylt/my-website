@@ -1,7 +1,12 @@
 <script>
 	import { resolve } from '$app/paths';
+	import { users } from '$lib/users';
 
 	let colors = $state([
+		{
+			name: 'Svart',
+			value: 'black'
+		},
 		{
 			name: 'Blå',
 			value: 'blue'
@@ -17,17 +22,32 @@
 		{ name: 'Gul', value: 'yellow' }
 	]);
 
+	// Unused, broke the selector
 	function shuffleColors() {
 		colors.sort(() => Math.random() - 0.5);
+		colors = [...colors];
 	}
 	shuffleColors();
 
-	let name = '';
-	let email = '';
-	let password = '';
-	let color = 'black';
+	let name = $state('');
+	let email = $state('');
+	let password = $state('');
+	let color = $state('black');
+
 	function handleSubmit(event) {
 		event.preventDefault();
+
+		if ($users.some((user) => user.name == name)) {
+			alert('Name already in use!');
+			return;
+		} else if ($users.some((user) => user.email == email)) {
+			alert('Email already in use!');
+			return;
+		}
+
+		let newUser = { name, password, email, color };
+		$users = [...$users, newUser];
+
 		alert(
 			`Välkommen!\nNamn: ${name}\nE-post: ${email}\nPassword: ${password
 				.split('')
@@ -40,10 +60,10 @@
 <main>
 	<div class="container">
 		<h1>Registrering</h1>
+		<div
+			style="width: 100px; height: 100px; border-radius: 50%; overflow:hidden; background-color:{color};"
+		></div>
 		<form onsubmit={handleSubmit}>
-			<div
-				style="width: 100px; height: 100px; border-radius: 50%; overflow:hidden; background-color:{color};"
-			></div>
 			<div>
 				<label for="name">Namn:</label>
 				<input bind:value={name} type="text" id="name" />
@@ -58,7 +78,7 @@
 			</div>
 			<div>
 				<label for="color">Favoritfärg</label>
-				<select bind:value={color} onclick={shuffleColors} name="color" id="color">
+				<select bind:value={color} name="color" id="color">
 					{#each colors as color (color.name)}
 						<option value={color.value}>{color.name}</option>
 					{/each}

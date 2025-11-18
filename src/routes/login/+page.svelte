@@ -1,39 +1,19 @@
 <script>
 	import { resolve } from '$app/paths';
+	import { users } from '$lib/users';
 
-	let colors = $state([
-		{
-			name: 'Blå',
-			value: 'blue'
-		},
-		{
-			name: 'Röd',
-			value: 'red'
-		},
-		{
-			name: 'Lila',
-			value: 'purple'
-		},
-		{ name: 'Gul', value: 'yellow' }
-	]);
+	let email = $state('');
+	let password = $state('');
 
-	function shuffleColors() {
-		colors.sort(() => Math.random() - 0.5);
-	}
-	shuffleColors();
-
-	let name = '';
-	let email = '';
-	let password = '';
-	let color = 'black';
 	function handleSubmit(event) {
 		event.preventDefault();
-		alert(
-			`Välkommen!\nNamn: ${name}\nE-post: ${email}\nPassword: ${password
-				.split('')
-				.map(() => '*')
-				.join('')}`
-		);
+
+		if (!$users.some((user) => user.email == email && user.password == password)) {
+			alert('Felaktig e-post eller lösenord');
+			return;
+		}
+
+		alert(`Du är inloggad!`);
 	}
 </script>
 
@@ -41,9 +21,6 @@
 	<div class="container">
 		<h1>Inlogging</h1>
 		<form onsubmit={handleSubmit}>
-			<div
-				style="width: 100px; height: 100px; border-radius: 50%; overflow:hidden; background-color:{color};"
-			></div>
 			<div>
 				<label for="email">E-post:</label>
 				<input bind:value={email} type="email" id="email" />
