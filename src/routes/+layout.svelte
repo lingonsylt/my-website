@@ -68,9 +68,7 @@
 	nav {
 		background: gainsboro;
 		padding: 5px;
-		position: fixed;
-		top: 0;
-		width: 100%;
+		position: sticky;
 	}
 	.nav-link {
 		margin: 5px;
