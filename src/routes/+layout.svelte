@@ -66,11 +66,11 @@
 			sans-serif;
 	}
 	nav {
-		background: gainsboro;
-		padding: 5px;
-		position: fixed;
+		position: sticky;
 		top: 0;
 		width: 100%;
+		background: gainsboro;
+		padding: 5px;
 	}
 	.nav-link {
 		margin: 5px;

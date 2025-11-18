@@ -1,5 +1,6 @@
 <script>
 	import { resolve } from '$app/paths';
+	import { usersStore } from '$lib/users';
 
 	let colors = $state([
 		{
@@ -28,6 +29,7 @@
 	let color = 'black';
 	function handleSubmit(event) {
 		event.preventDefault();
+		let newUser = { name, email, password };
 		alert(
 			`Välkommen!\nNamn: ${name}\nE-post: ${email}\nPassword: ${password
 				.split('')
