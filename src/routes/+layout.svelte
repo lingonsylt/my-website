@@ -20,6 +20,10 @@
 		{
 			name: 'Logga in',
 			path: '/login'
+		},
+		{
+			name: 'Shopping List',
+			path: '/shoppinglist'
 		}
 	];
 </script>
@@ -71,7 +75,7 @@
 		position: sticky;
 	}
 	.nav-link {
-		margin: 5px;
+		margin: 10px;
 		font-size: 1.5rem;
 		text-decoration: none;
 		color: black;
