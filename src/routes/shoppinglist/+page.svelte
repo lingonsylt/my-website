@@ -5,22 +5,25 @@
 
 <style>
 	.container {
-		margin: auto;
 		display: grid;
+		grid-template-rows: 1fr 8fr 1fr;
+		margin: auto;
 		background-color: darkred;
 		width: 60vw;
 		height: 70vh;
 		border-radius: 20px;
-		padding: 10px;
 	}
-	h1 {
+	.container h1 {
+		justify-self: center;
+		align-self: center;
 		background-color: red;
 		border-radius: 10px;
 		padding: 10px;
-		margin: 10px;
 	}
 	.categories-container {
+		display: grid;
 		height: 100%;
 		background-color: red;
+		border-radius: 10px;
 	}
 </style>
