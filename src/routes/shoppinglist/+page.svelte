@@ -10,16 +10,31 @@
 		{
 			name: 'Köpt exempel',
 			köpt: true,
-			priority: 1
+			priority: 0
 		}
 	]);
+	let pendingSort = null;
+	$effect(() => {
+		console.log('effect');
+		let sorted = varor.toSorted((a, b) => b.priority - a.priority);
+		if (pendingSort) {
+			pendingSort.clearTimeout();
+		}
+		console.log('previous');
+		pendingSort = setTimeout(() => {
+			varor = sorted;
+		}, 1000);
+		console.log('done');
+	});
+
 	let input = $state('');
 	function handleAdd(event) {
 		event.preventDefault();
 		if (input.trim() != '') {
 			varor.push({
 				name: input.trim(),
-				köpt: false
+				köpt: false,
+				priority: 0
 			});
 		}
 		input = '';
@@ -50,8 +65,8 @@
 				{#each varor as vara, i (vara)}
 					{#if !vara.köpt}
 						<li transition:fade>
-							<input class="priority" type="number" />
 							{vara.name}
+							<input class="priority" type="number" bind:value={vara.priority} />
 							<button
 								onclick={() => {
 									removeVara(i);
@@ -85,6 +100,7 @@
 					{#if vara.köpt}
 						<li transition:fade>
 							{vara.name}
+							<input class="priority" type="number" bind:value={vara.priority} />
 							<button
 								onclick={() => {
 									removeVara(i);
