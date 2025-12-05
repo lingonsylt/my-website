@@ -170,7 +170,10 @@
 		list-style-position: inside;
 	}
 	li {
-		padding: 5px 16px;
+		margin: 0 10px;
+		padding: 5px 10px;
+	}
+	li:not(:last-child) {
 		border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 	}
 	.input {
