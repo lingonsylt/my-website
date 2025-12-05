@@ -13,18 +13,19 @@
 			priority: 0
 		}
 	]);
-	let pendingSort = null;
+	// let pendingSort = null;
 	$effect(() => {
-		console.log('effect');
-		let sorted = varor.toSorted((a, b) => b.priority - a.priority);
-		if (pendingSort) {
-			pendingSort.clearTimeout();
-		}
-		console.log('previous');
-		pendingSort = setTimeout(() => {
-			varor = sorted;
-		}, 1000);
-		console.log('done');
+		varor.sort((a, b) => b.priority - a.priority);
+		// console.log('effect');
+		// let sorted = varor.toSorted((a, b) => b.priority - a.priority);
+		// if (pendingSort) {
+		// 	pendingSort.clearTimeout();
+		// }
+		// console.log('previous');
+		// pendingSort = setTimeout(() => {
+		// 	varor = sorted;
+		// }, 1000);
+		// console.log('done');
 	});
 
 	let input = $state('');
