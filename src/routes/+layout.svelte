@@ -24,6 +24,10 @@
 		{
 			name: 'Shopping List',
 			path: '/shoppinglist'
+		},
+		{
+			name: 'Memory',
+			path: '/memory'
 		}
 	];
 </script>
