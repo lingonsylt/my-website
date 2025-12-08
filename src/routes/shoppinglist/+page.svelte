@@ -49,6 +49,11 @@
 	function clear(targetState) {
 		varor = varor.filter((vara) => vara.köpt != targetState);
 	}
+	function moveAll(newState) {
+		for (let vara of varor) {
+			vara.köpt = newState;
+		}
+	}
 </script>
 
 <main class="container">
@@ -56,12 +61,21 @@
 	<div class="categories-container">
 		<section>
 			<h2>Varör att köpa</h2>
-			<button
-				onclick={() => {
-					clear(false);
-				}}
-				class="clear-button">Rensa</button
-			>
+			<div class="util-container">
+				<button
+					class="util-button"
+					onclick={() => {
+						clear(false);
+					}}>Rensa</button
+				>
+				<button
+					class="util-button"
+					onclick={() => {
+						moveAll(true);
+					}}>Flytta alla ></button
+				>
+			</div>
+
 			<ol>
 				{#each varor as vara, i (vara)}
 					{#if !vara.köpt}
@@ -90,18 +104,27 @@
 		</section>
 		<section>
 			<h2>Köpta varor</h2>
-			<button
-				onclick={() => {
-					clear(true);
-				}}
-				class="clear-button">Rensa</button
-			>
+			<div class="util-container">
+				<button
+					class="util-button"
+					onclick={() => {
+						moveAll(false);
+					}}
+				>
+					{'< Flytta alla'}</button
+				>
+				<button
+					class="util-button"
+					onclick={() => {
+						clear(true);
+					}}>Rensa</button
+				>
+			</div>
 			<ul>
 				{#each varor as vara, i (vara)}
 					{#if vara.köpt}
 						<li transition:fade>
 							{vara.name}
-							<input class="priority" type="number" bind:value={vara.priority} />
 							<button
 								onclick={() => {
 									removeVara(i);
@@ -182,7 +205,7 @@
 		align-items: center;
 		padding: 10px;
 	}
-	.clear-button {
+	.util-container {
 		margin: auto;
 	}
 	.priority {
