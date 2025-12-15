@@ -86,11 +86,12 @@
 		font-size: 1.5em;
 		border: none;
 		border-radius: 10px;
-		transition: transform 0.2s ease;
+		transition:
+			transform 0.2s ease,
+			border-width 0.2s ease;
 	}
 	.marked {
-		border: 2px solid black;
-		filter: invert();
+		border: 5px solid black;
 	}
 	.item:hover {
 		transform: scale(1.2) translateY(-10px);
