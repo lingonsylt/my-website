@@ -70,8 +70,8 @@
 		display: inline;
 	}
 	.grid {
-		width: 80vw;
-		height: 80vw;
+		width: 80vh;
+		height: 80vh;
 		display: grid;
 		grid-gap: 10px;
 		padding: 10px;
@@ -86,9 +86,18 @@
 		font-size: 1.5em;
 		border: none;
 		border-radius: 10px;
+		transition: transform 0.2s ease;
 	}
 	.marked {
 		border: 2px solid black;
 		filter: invert();
+	}
+	.item:hover {
+		transform: scale(1.2) translateY(-10px);
+		z-index: 1;
+		box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.2);
+	}
+	.item:active {
+		transform: scale(0.9) translateY(5px);
 	}
 </style>
