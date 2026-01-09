@@ -1,27 +1,51 @@
 <script>
-	import favicon from '$lib/assets/favicon.svg';
-	let cardBackURL =
-		'https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.bKAWEVqJT2nep1zID5WtkgHaKX%3Fpid%3DApi&sp=1765802805T944a6c6f2d94512778e11dc415edcdd0b0244f235c4d7e93c3a997443de7e815';
-	let cardPairs = [favicon];
-	const card_count = 12;
+	const pair_count = 6;
+	let cardBackURL = 'https://i.pinimg.com/originals/79/21/66/792166a01d9f4024b4eb51ae51b0b185.jpg';
 	let cards = $state([]);
-	for (let i = 0; i < card_count; i++) {
-		cards.push({
-			id: Math.floor(i / 2),
-			image: favicon,
-			flipped: false,
-			matched: false
-		});
-	}
 	let points = $state({
 		blue: 0,
 		red: 0
 	});
-	let turn = $state('blue');
+	let turn = $state('');
 
-	let cooldownActive = false;
+	let cooldownActive = $state(false);
+	let gameCount = $state(-1);
+
+	function newGame() {
+		gameCount++;
+		let newCards = [];
+		for (let i = 0; i < pair_count; i++) {
+			let randomImg = 'https://picsum.photos/200?random=' + gameCount * pair_count + i;
+			newCards.push({
+				id: i,
+				image: randomImg,
+				flipped: false,
+				matched: false
+			});
+			newCards.push({
+				id: i,
+				image: randomImg,
+				flipped: false,
+				matched: false
+			});
+		}
+		newCards.sort(() => Math.random() - 0.5);
+		cards = newCards;
+		points = {
+			blue: 0,
+			red: 0
+		};
+		turn = ['blue', 'red'][gameCount % 2];
+
+		cooldownActive = false;
+	}
+	newGame();
+
 	function getFlipped() {
 		return cards.filter((c) => !c.matched && c.flipped);
+	}
+	function getALlFlipped() {
+		return cards.filter((c) => c.flipped);
 	}
 
 	function flip(i) {
@@ -38,9 +62,22 @@
 				c.matched = true;
 			});
 			points[turn]++;
+			if (getALlFlipped().length == cards.length) {
+				if (points.red > points.blue) {
+					('67');
+				} else if (points.red < points.blue) {
+					('blue');
+				} else {
+					('draw');
+				}
+				return;
+			}
 		}
 		cooldownActive = true;
 		setTimeout(() => {
+			if (!cooldownActive) {
+				return;
+			}
 			cards.forEach((c) => {
 				c.flipped = c.matched;
 			});
@@ -50,28 +87,35 @@
 	}
 </script>
 
-<h1>Memory</h1>
-<main>
-	{#each cards as card, i (card)}
-		<div
-			class="card"
-			role="button"
-			tabindex="0"
-			class:flipped={card.flipped}
-			onclick={() => {
-				flip(i);
-			}}
-			onkeypress={(e) => {
-				if (e.key == 'Enter') {
-					flip(i);
-				}
-			}}
-		>
-			<img src={cardBackURL} alt="Baksida nr {i}" class="card-back" />
-			<img src={card.image} alt="Kort nr {i}" class="card-front" />
+<div class="container">
+	<main>
+		<h1>Memory</h1>
+		<div class="card-grid">
+			{#each cards as card, i (card)}
+				<div
+					class="card"
+					role="button"
+					tabindex="0"
+					class:flipped={card.flipped}
+					onclick={() => {
+						flip(i);
+					}}
+					onkeypress={(e) => {
+						if (e.key == 'Enter') {
+							flip(i);
+						}
+					}}
+				>
+					<img src={cardBackURL} alt="Baksida nr {i}" class="card-back" />
+					<img src={card.image} alt="Kort nr {i}" class="card-front" />
+				</div>
+			{/each}
 		</div>
-	{/each}
-</main>
+		<div class="menu-bar">
+			<button class="restart-button" onclick={newGame}>Restart</button>
+		</div>
+	</main>
+</div>
 <aside class="blue-score">
 	<p>{points.blue}</p>
 </aside>
@@ -81,13 +125,31 @@
 <aside class="turn-indicator {turn}-score"></aside>
 
 <style>
+	.container {
+		display: flex;
+		justify-content: center;
+	}
 	main {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-evenly;
+		background-color: darkslategray;
+		margin: 10px;
+		padding: 10px;
+		gap: 5px;
+		border-radius: 20px;
+	}
+	.card-grid {
 		display: grid;
 		grid-template: repeat(4, 100px) / repeat(3, 100px);
+		grid-gap: 5px;
 	}
 	.card {
+		--scale: 1 --rotation: 0deg;
 		position: relative;
 		border: 1px solid black;
+		transform: scale(var(--scale)) rotateY(var(--rotation));
 		transition: transform 0.5s;
 		transform-style: preserve-3d;
 	}
@@ -101,7 +163,25 @@
 		transform: rotateY(180deg);
 	}
 	.flipped {
-		transform: rotateY(180deg);
+		--rotation: 180deg;
+	}
+	.card:hover {
+		z-index: 1;
+		--scale: 1.1;
+	}
+
+	.menu-bar {
+		display: flex;
+		justify-content: center;
+		padding: 5px;
+	}
+	.menu-bar * {
+		border: none;
+		border-radius: 5px;
+		height: 35px;
+	}
+	.menu-bar button {
+		background-color: slategray;
 	}
 
 	aside {
