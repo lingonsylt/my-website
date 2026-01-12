@@ -7,6 +7,7 @@
 		red: 0
 	});
 	let turn = $state('');
+	let gameState = $state('');
 
 	let cooldownActive = $state(false);
 	let gameCount = $state(-1);
@@ -36,6 +37,7 @@
 			red: 0
 		};
 		turn = ['blue', 'red'][gameCount % 2];
+		gameState = `It is ${turn[0].toUpperCase() + turn.slice(1)}'s turn`;
 
 		cooldownActive = false;
 	}
@@ -64,14 +66,14 @@
 			points[turn]++;
 			if (getALlFlipped().length == cards.length) {
 				if (points.red > points.blue) {
-					('67');
+					gameState = 'Red has won!';
 				} else if (points.red < points.blue) {
-					('blue');
+					gameState = 'Blue has won!';
 				} else {
-					('draw');
+					gameState = 'It is a draw!';
 				}
-				return;
 			}
+			return;
 		}
 		cooldownActive = true;
 		setTimeout(() => {
@@ -83,6 +85,7 @@
 			});
 			cooldownActive = false;
 			turn = turn == 'blue' ? 'red' : 'blue';
+			gameState = `It is ${turn[0].toUpperCase() + turn.slice(1)}'s turn`;
 		}, 1000);
 	}
 </script>
@@ -90,6 +93,7 @@
 <div class="container">
 	<main>
 		<h1>Memory</h1>
+		<p class="game-state">{gameState}</p>
 		<div class="card-grid">
 			{#each cards as card, i (card)}
 				<div
@@ -112,7 +116,9 @@
 			{/each}
 		</div>
 		<div class="menu-bar">
-			<button class="restart-button" onclick={newGame}>Restart</button>
+			<button class="restart-button" onclick={newGame}
+				>{gameState == '' ? 'Restart' : 'New Game'}</button
+			>
 		</div>
 	</main>
 </div>
@@ -140,13 +146,30 @@
 		gap: 5px;
 		border-radius: 20px;
 	}
+	h1 {
+		margin-bottom: 0;
+	}
+	.game-state {
+		font-size: 1em;
+		margin: 10px;
+	}
+	@media (max-width: 500px) {
+		.card-grid {
+			grid-template: repeat(2, 100px) / repeat(6, 100px);
+		}
+	}
+	@media (min-width: 500px) {
+		.card-grid {
+			grid-template: repeat(3, 100px) / repeat(4, 100px);
+		}
+	}
 	.card-grid {
 		display: grid;
-		grid-template: repeat(4, 100px) / repeat(3, 100px);
 		grid-gap: 5px;
 	}
 	.card {
-		--scale: 1 --rotation: 0deg;
+		--rotation: 0deg;
+		--scale: 1;
 		position: relative;
 		border: 1px solid black;
 		transform: scale(var(--scale)) rotateY(var(--rotation));
