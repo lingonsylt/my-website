@@ -28,6 +28,10 @@
 		{
 			name: 'Memory',
 			path: '/memory'
+		},
+		{
+			name: 'Chat',
+			path: '/chat'
 		}
 	];
 </script>

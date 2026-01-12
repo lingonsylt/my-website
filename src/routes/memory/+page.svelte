@@ -51,7 +51,7 @@
 	}
 
 	function flip(i) {
-		if (cooldownActive || cards[i].flipped || getFlipped().length > 2) {
+		if (cooldownActive || cards[i].flipped || getFlipped().length >= 2) {
 			return;
 		}
 		cards[i].flipped = !cards[i].flipped;
