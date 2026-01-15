@@ -68,6 +68,7 @@
 		height: 100vh;
 		margin: 0;
 		padding: 0;
+		background-color: black;
 		font-family:
 			'Inter',
 			system-ui,

@@ -60,7 +60,7 @@
 		grid-template: 9fr 1fr / 1fr;
 		border-radius: 10px;
 		padding: 10px;
-		background-color: skyblue;
+		background-color: rgb(0, 50, 50);
 	}
 	.messages {
 		overflow-y: scroll;
