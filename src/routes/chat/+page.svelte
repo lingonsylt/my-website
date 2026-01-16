@@ -4,6 +4,8 @@
 	const eliza = new Elizabot();
 	import { chatStore } from '$lib/chat';
 
+	let msgContainer;
+
 	let chat = $state([
 		{
 			id: 0,
@@ -18,22 +20,27 @@
 		$chatStore = chat;
 	});
 
-	async function write(text) {
+	function addMessage(text, user) {
 		chat.push({
 			id: chat.length,
-			user: 'user',
-			message: text
+			user: user,
+			message: text,
+			time: Date.now()
 		});
+		msgContainer.scrollTo({
+			top: msgContainer.scrollHeight,
+			behavior: 'smooth'
+		});
+	}
+
+	async function write(text) {
+		addMessage(text, 'user');
 		var element = document.getElementById('visible');
 		element.style.display = 'flex';
 		await new Promise((resolve) => setTimeout(resolve, 1000 + Math.random(1000)));
 		element.style.display = 'none';
 		let reply = eliza.transform(text);
-		chat.push({
-			id: chat.length,
-			user: 'eliza',
-			message: reply
-		});
+		addMessage(reply, 'eliza');
 	}
 	function clearChat() {
 		chat = [];
@@ -41,7 +48,7 @@
 </script>
 
 <main>
-	<seciton class="messages">
+	<seciton class="messages" bind:this={msgContainer}>
 		{#each chat as message (message.id)}
 			<article data-user={message.user} data-time="67:67" class="{message.user}-msg">
 				<p>{message.message}</p>
@@ -84,6 +91,9 @@
 		padding: 10px;
 		background-color: rgb(0, 50, 50);
 	}
+	main * {
+		color: floralwhite;
+	}
 	.messages {
 		display: flex;
 		flex-direction: column;
@@ -92,9 +102,6 @@
 	.input {
 		width: 90%;
 		display: flex;
-	}
-	.messages article {
-		width: 70%;
 	}
 	.input input {
 		width: 100%;
@@ -124,6 +131,12 @@
 		border: none;
 		transition: filter 0.2s ease;
 	}
+	.messages article p {
+		margin: 0 10px;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		word-break: break-all;
+	}
 	.messages article:hover {
 		filter: brightness(1.5);
 	}
@@ -147,16 +160,11 @@
 	}
 	.eliza-msg {
 		background-color: rgba(0, 0, 0, 0.1);
-		text-align: start;
+		align-self: flex-start;
 	}
 	.user-msg {
-		margin-left: 100%;
 		background-color: rgba(0, 0, 0, 0.2);
-		text-align: end;
 		align-self: flex-end;
-	}
-	.messages article p {
-		margin: 0 10px;
 	}
 
 	@keyframes typing {
