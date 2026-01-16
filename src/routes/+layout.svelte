@@ -32,6 +32,10 @@
 		{
 			name: 'Chat',
 			path: '/chat'
+		},
+		{
+			name: 'Search',
+			path: '/search'
 		}
 	];
 </script>
