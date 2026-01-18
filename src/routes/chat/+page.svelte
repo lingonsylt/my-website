@@ -82,11 +82,11 @@
 
 <style>
 	main {
-		margin: auto;
+		margin: 25px auto;
 		width: 60vw;
 		height: 70vh;
 		display: grid;
-		grid-template: 9fr 1fr / 1fr;
+		grid-template: 1fr 75px / 1fr;
 		border-radius: 10px;
 		padding: 10px;
 		background-color: rgb(0, 50, 50);
@@ -105,19 +105,20 @@
 	}
 	.input input {
 		width: 100%;
-		transition: border 0.1s ease;
+		outline: none;
 	}
 	.input input::placeholder {
 		font-style: italic;
-		color: skyblue;
+		color: pink;
 	}
 	.input input:focus {
-		border: 5px solid magenta;
+		border: 3px solid pink;
 	}
 	.input button {
 		background-color: rgba(0, 0, 0, 0.3);
 	}
 	.input * {
+		font-family: inherit;
 		margin: 10px;
 		padding: 10px;
 		border-radius: 10px;
@@ -159,7 +160,7 @@
 		background-color: rgba(0, 0, 0, 0.175);
 	}
 	.eliza-msg {
-		background-color: rgba(0, 0, 0, 0.1);
+		background-color: rgba(0, 0, 0, 0.15);
 		align-self: flex-start;
 	}
 	.user-msg {
@@ -209,5 +210,26 @@
 	}
 	.clear-btn:active {
 		transform: scale(0.9);
+	}
+	/*Scrollbar*/
+	/* WebKit browsers (Chrome, Edge, Safari) */
+	::-webkit-scrollbar {
+		width: 10px; /* thin overall scrollbar */
+	}
+
+	::-webkit-scrollbar-track {
+		background: darkslategrey; /* dark grey track */
+		border-radius: 5px; /* fully rounded ends */
+	}
+
+	::-webkit-scrollbar-thumb {
+		background: rgba(255, 255, 255, 0.3); /* light grey handle */
+		border-radius: 5px; /* fully rounded ends */
+		border: 2px solid darkslategray; /* creates spacing so handle appears thicker */
+	}
+
+	/* Optional: hover state */
+	::-webkit-scrollbar-thumb:hover {
+		background: #d0d0d0;
 	}
 </style>
