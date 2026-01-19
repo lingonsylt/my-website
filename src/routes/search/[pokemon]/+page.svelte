@@ -5,6 +5,7 @@
 {#await data}
 	<p>Searching the pokedex...</p>
 {:then pokemon}
+	<h1>{pokemon.response.name}</h1>
 	<article>
 		{#each Object.values(pokemon.response.sprites) as sprite, i (sprite)}
 			{#if typeof sprite == 'string'}
@@ -12,6 +13,14 @@
 			{/if}
 		{/each}
 	</article>
-	<h1>{pokemon.response.name}</h1>
 	<section></section>
 {/await}
+
+<style>
+	article {
+		display: flex;
+		flex-wrap: wrap;
+		width: 90%;
+		gap: 1em;
+	}
+</style>

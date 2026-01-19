@@ -12,7 +12,7 @@ const config = {
 		adapter: adapter({
 			pages: 'docs',
 			assets: 'docs',
-			fallback: null
+			fallback: '404.html'
 		})
 	}
 };
