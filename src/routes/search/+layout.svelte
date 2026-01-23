@@ -1,14 +1,17 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
-	import { previousSearches, logSearch } from '$lib/searchHistory.svelte';
+	import { previousSearches } from '$lib/searchHistory.svelte';
 
 	function handleSearch(e) {
 		e.preventDefault();
 		const formData = new FormData(e.target);
 		const query = formData.get('query');
+		console.log(query);
+		if (query == '') {
+			return;
+		}
 		let formattedQuery = query.toLowerCase();
-		logSearch({ query, color: 'red' });
 		goto(resolve('/search/' + formattedQuery));
 	}
 </script>
@@ -20,10 +23,16 @@
 	</form>
 	<slot></slot>
 	<footer>
-		<h3>Previous Searches</h3>
+		{#if previousSearches.length > 0}
+			<h3>Previous Searches</h3>
+		{/if}
 		<div>
 			{#each previousSearches as query (query)}
-				<a href={resolve('/search/' + query)}>{query}</a>
+				<a
+					href={resolve('/search/' + query.query)}
+					style="background: linear-gradient(90deg, {query.colors[0]} 50%, {query.colors[1]} 50%);"
+					>{query.query}</a
+				>
 			{/each}
 		</div>
 	</footer>

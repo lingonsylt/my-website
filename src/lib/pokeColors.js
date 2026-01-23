@@ -1,0 +1,20 @@
+export const pokeColors = {
+	bug: ['#729F3F', '#729F3F'],
+	dragon: ['#53A4CF', '#F16E57'],
+	fairy: ['#FDB9E9', '#FDB9E9'],
+	fire: ['#FD7D24', '#FD7D24'],
+	ghost: ['#7B62A3', '#7B62A3'],
+	ground: ['#53A4CF', '#AB9842'],
+	normal: ['#A4ACAF', '#A4ACAF'],
+	psychic: ['#F265B8', '#F265B8'],
+	steel: ['#9EB7B8', '#9EB7B8'],
+	dark: ['#707070', '#707070'],
+	electric: ['#EED535', '#EED535'],
+	fighting: ['#D56723', '#D56723'],
+	flying: ['#3DC7EF', '#BDB9B8'],
+	grass: ['#9BCC50', '#9BCC50'],
+	ice: ['#51C4E7', '#51C4E7'],
+	poison: ['#B97FC9', '#B97FC9'],
+	rock: ['#A38C21', '#A38C21'],
+	water: ['#4592C4', '#4592C4']
+};
