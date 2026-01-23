@@ -1,12 +1,15 @@
 <script>
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { previousSearches, logSearch } from '$lib/searchHistory.svelte';
 
 	function handleSearch(e) {
 		e.preventDefault();
 		const formData = new FormData(e.target);
 		const query = formData.get('query');
-		goto(resolve('/search/' + query));
+		let formattedQuery = query.toLowerCase();
+		logSearch({ query, color: 'red' });
+		goto(resolve('/search/' + formattedQuery));
 	}
 </script>
 
@@ -16,6 +19,14 @@
 		<button type="submit">Search</button>
 	</form>
 	<slot></slot>
+	<footer>
+		<h3>Previous Searches</h3>
+		<div>
+			{#each previousSearches as query (query)}
+				<a href={resolve('/search/' + query)}>{query}</a>
+			{/each}
+		</div>
+	</footer>
 </main>
 <div class="backdrop"></div>
 
@@ -23,6 +34,7 @@
 	main {
 		display: flex;
 		flex-direction: column;
+		justify-content: space-between;
 		align-items: center;
 		width: 80vw;
 		height: 80vh;
@@ -73,6 +85,39 @@
 		transition: transform 0.2s ease;
 		transform: scale(0.9);
 	}
+	footer {
+		align-self: stretch;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		margin: 10px;
+		gap: 5px;
+		align-self: stretch;
+	}
+	footer h3 {
+		margin: 0;
+	}
+	footer div {
+		display: flex;
+		gap: 10px;
+	}
+	footer a {
+		padding: 0.5em;
+		background-color: black;
+		padding: 10px;
+		border-radius: 10px;
+		transition: transform 0.5s ease;
+		color: white;
+		text-decoration: none;
+	}
+	footer a:hover {
+		transform: scale(1.1);
+	}
+	footer a:active {
+		transition: transform 0.2s ease;
+		transform: scale(0.9);
+	}
+
 	.backdrop {
 		position: fixed;
 		top: 0;
