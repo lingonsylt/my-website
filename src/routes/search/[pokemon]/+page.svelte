@@ -1,23 +1,17 @@
 <script>
-	import { pokeColors } from '$lib/pokeColors.js';
-	import { logSearch } from '$lib/searchHistory.svelte.js';
-
-	const { data } = $props();
+	const { data, params } = $props();
 
 	console.log(data);
 
-	let query = data.params.pokemon;
+	let query = params.pokemon;
 	let pokemon = data.response;
 
-	let type = pokemon.types[0].type.name;
-
-	logSearch(query, pokeColors[type]);
+	console.log(query, pokemon);
 </script>
 
-{#await data}
+{#await data.response}
 	Loading...
-{:then data}
-	<!-- Do something with the data -->
+{:then pokemon}
 	<h1>{pokemon.name}</h1>
 	<article>
 		{#each Object.entries(pokemon.sprites) as sprite (sprite)}

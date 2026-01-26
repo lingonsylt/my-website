@@ -7,7 +7,6 @@
 		e.preventDefault();
 		const formData = new FormData(e.target);
 		const query = formData.get('query');
-		console.log(query);
 		if (query == '') {
 			return;
 		}
