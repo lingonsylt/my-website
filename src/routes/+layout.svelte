@@ -1,8 +1,11 @@
 <script>
 	import favicon from '$lib/assets/favicon.svg';
 	import { resolve } from '$app/paths';
+	import { globalState } from '$lib/globalState.svelte';
 
 	let { children } = $props();
+
+	let title = $derived((globalState.titleText ? `${globalState.titleText} • ` : '') + 'lingon');
 
 	let links = [
 		{
@@ -46,6 +49,7 @@
 		href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
 		rel="stylesheet"
 	/>
+	<title>{title}</title>
 </svelte:head>
 
 <nav>

@@ -14,8 +14,8 @@ export async function load({ params, fetch }) {
 	}
 	let data = await response.json();
 
-	let type = data.types[0].type.name;
+	let colors = data.types.map((t) => pokeColors[t.type.name]).flat();
 
-	logSearch(params.pokemon, pokeColors[type]);
+	logSearch(params.pokemon, colors);
 	return { response: data };
 }

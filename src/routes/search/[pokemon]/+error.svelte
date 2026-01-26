@@ -1,5 +1,10 @@
 <script>
 	import { page } from '$app/stores';
+	import { globalState } from '$lib/globalState.svelte';
+
+	const { params } = $props();
+
+	globalState.titleText = params.pokemon;
 </script>
 
 <section>

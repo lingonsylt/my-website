@@ -1,17 +1,13 @@
 <script>
-	const { data, params } = $props();
+	import { globalState } from '$lib/globalState.svelte';
 
-	console.log(data);
-
-	let query = params.pokemon;
-	let pokemon = data.response;
-
-	console.log(query, pokemon);
+	const { params, data } = $props();
 </script>
 
 {#await data.response}
 	Loading...
 {:then pokemon}
+	{(globalState.titleText = params.pokemon ? '' : '')}
 	<h1>{pokemon.name}</h1>
 	<article>
 		{#each Object.entries(pokemon.sprites) as sprite (sprite)}

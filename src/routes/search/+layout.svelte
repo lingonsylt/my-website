@@ -3,6 +3,8 @@
 	import { resolve } from '$app/paths';
 	import { previousSearches } from '$lib/searchHistory.svelte';
 
+	const { children } = $props();
+
 	function handleSearch(e) {
 		e.preventDefault();
 		const formData = new FormData(e.target);
@@ -20,17 +22,19 @@
 		<input type="text" name="query" placeholder="Sök upp en pokemon" />
 		<button type="submit">Search</button>
 	</form>
-	<slot></slot>
+	{@render children?.()}
 	<footer>
 		{#if previousSearches.length > 0}
 			<h3>Previous Searches</h3>
 		{/if}
 		<div>
 			{#each previousSearches as query (query)}
-				<a
-					href={resolve('/search/' + query.query)}
-					style="background: linear-gradient(90deg, {query.colors[0]} 50%, {query.colors[1]} 50%);"
-					>{query.query}</a
+				<button
+					onclick={() => {
+						goto(resolve('/search/' + query.query));
+					}}
+					style="background: linear-gradient(120deg, {query.colors.join(',')});"
+					>{query.query}</button
 				>
 			{/each}
 		</div>
@@ -109,19 +113,21 @@
 		display: flex;
 		gap: 10px;
 	}
-	footer a {
+	footer button {
 		padding: 0.5em;
 		background-color: black;
 		padding: 10px;
 		border-radius: 10px;
+		border: none;
 		transition: transform 0.5s ease;
 		color: white;
+		font: inherit;
 		text-decoration: none;
 	}
-	footer a:hover {
+	footer button:hover {
 		transform: scale(1.1);
 	}
-	footer a:active {
+	footer button:active {
 		transition: transform 0.2s ease;
 		transform: scale(0.9);
 	}
