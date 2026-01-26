@@ -3,7 +3,19 @@
 	import { resolve } from '$app/paths';
 	import { previousSearches } from '$lib/searchHistory.svelte';
 
-	const { children } = $props();
+	const { data, children } = $props();
+
+	let inputActive = $state(true);
+	let currentQuery = $state('');
+	let availableQueries = $state(data.available);
+	let searchPredictions = $derived(
+		[
+			...previousSearches.map((s) => s.query),
+			...availableQueries.filter((q) => !previousSearches.some((p) => p.query == q))
+		]
+			.filter((q) => currentQuery == '' || q.includes(currentQuery))
+			.toSorted((a, b) => a.indexOf(currentQuery) - b.indexOf(currentQuery))
+	);
 
 	function handleSearch(e) {
 		e.preventDefault();
@@ -19,8 +31,28 @@
 
 <main>
 	<form action="" onsubmit={handleSearch}>
-		<input type="text" name="query" placeholder="Sök upp en pokemon" />
+		<input
+			onfocus={() => (inputActive = true)}
+			onblur={() => {
+				inputActive = false;
+			}}
+			bind:value={currentQuery}
+			type="text"
+			name="query"
+			placeholder="Sök upp en pokemon"
+		/>
 		<button type="submit">Search</button>
+		{#if inputActive}
+			<div class="predictions">
+				{#each searchPredictions as query (query)}
+					<button
+						onclick={() => {
+							goto(resolve('/search/' + query));
+						}}>{query}</button
+					>
+				{/each}
+			</div>
+		{/if}
 	</form>
 	{@render children?.()}
 	<footer>
@@ -56,6 +88,7 @@
 		border: 2px solid skyblue;
 	}
 	form {
+		position: relative;
 		display: flex;
 		margin: 10px;
 		padding: 5px;
@@ -97,6 +130,17 @@
 		transition: transform 0.2s ease;
 		transform: scale(0.9);
 	}
+
+	.predictions {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		margin-top: 5px;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
 	footer {
 		align-self: stretch;
 		display: flex;
