@@ -42,7 +42,7 @@
 			placeholder="Sök upp en pokemon"
 		/>
 		<button type="submit">Search</button>
-		{#if inputActive}
+		{#if inputActive && searchPredictions.length > 0}
 			<div class="predictions">
 				{#each searchPredictions as query (query)}
 					<button
