@@ -10,11 +10,17 @@
 	let availableQueries = $state(data.available);
 	let searchPredictions = $derived(
 		[
-			...previousSearches.map((s) => s.query),
-			...availableQueries.filter((q) => !previousSearches.some((p) => p.query == q))
+			...previousSearches.map((s) => {
+				return { recent: true, query: s.query };
+			}),
+			...availableQueries
+				.filter((q) => currentQuery != '' && !previousSearches.some((p) => p.query == q))
+				.map((q) => {
+					return { recent: false, query: q };
+				})
 		]
-			.filter((q) => currentQuery == '' || q.includes(currentQuery))
-			.toSorted((a, b) => a.indexOf(currentQuery) - b.indexOf(currentQuery))
+			.filter((q) => q.query.includes(currentQuery))
+			.toSorted((a, b) => b.query.startsWith(currentQuery) - a.query.startsWith(currentQuery))
 	);
 
 	function handleSearch(e) {
@@ -43,13 +49,15 @@
 		/>
 		<button type="submit">Search</button>
 		{#if inputActive && searchPredictions.length > 0}
-			<div class="predictions">
-				{#each searchPredictions as query (query)}
-					<button
-						onclick={() => {
-							goto(resolve('/search/' + query));
-						}}>{query}</button
-					>
+			<div class="prediction-container">
+				{#each searchPredictions as prediction (prediction)}
+					<div class="prediction-card">
+						<button
+							onclick={() => {
+								goto(resolve('/search/' + prediction.query));
+							}}>{prediction.query}</button
+						>
+					</div>
 				{/each}
 			</div>
 		{/if}
@@ -97,7 +105,8 @@
 		border-radius: 10px;
 		background-color: rgba(0, 0, 0, 0.2);
 	}
-	form * {
+	form > input,
+	form > button {
 		padding: 10px;
 		border-radius: 5px;
 		border: none;
@@ -106,32 +115,32 @@
 		font-size: 1em;
 		color: white;
 	}
-	form input {
+	form > input {
 		width: 100%;
 		transition: background-color 0.2s ease;
 		outline: none;
 	}
-	form input:hover,
-	form input:focus {
+	form > input:hover,
+	form > input:focus {
 		background-color: rgba(0, 0, 0, 0.4);
 	}
-	form input::placeholder {
+	form > input::placeholder {
 		color: gainsboro;
 	}
-	form button {
+	form > button {
 		background-color: rgba(0, 0, 0, 0.5);
 		box-sizing: border-box;
 		transition: transform 0.5s ease;
 	}
-	form button:hover {
+	form > button:hover {
 		transform: scale(1.1);
 	}
-	form button:active {
+	form > button:active {
 		transition: transform 0.2s ease;
 		transform: scale(0.9);
 	}
 
-	.predictions {
+	.prediction-container {
 		position: absolute;
 		top: 100%;
 		left: 0;
@@ -139,6 +148,30 @@
 		width: 100%;
 		display: flex;
 		flex-direction: column;
+		padding: 5px;
+		gap: 5px;
+		align-self: stretch;
+		border-radius: 10px;
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+	.prediction-card {
+		padding: 10px;
+		border-radius: 5px;
+		border: none;
+		background-color: rgba(0, 0, 0, 0.3);
+		font: inherit;
+		font-size: 1em;
+		color: white;
+	}
+	.prediction-card button {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: none;
+		border: none;
+		font: inherit;
 	}
 
 	footer {
