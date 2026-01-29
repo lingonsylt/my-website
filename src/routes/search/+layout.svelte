@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { previousSearches } from '$lib/searchHistory.svelte';
+	import searchIcon from '$lib/assets/search-icon.svg';
 
 	const { data, children } = $props();
 
@@ -9,18 +10,16 @@
 	let currentQuery = $state('');
 	let availableQueries = $state(data.available);
 	let searchPredictions = $derived(
-		[
-			...previousSearches.map((s) => {
-				return { recent: true, query: s.query };
-			}),
-			...availableQueries
-				.filter((q) => currentQuery != '' && !previousSearches.some((p) => p.query == q))
-				.map((q) => {
-					return { recent: false, query: q };
-				})
-		]
-			.filter((q) => q.query.includes(currentQuery))
-			.toSorted((a, b) => b.query.startsWith(currentQuery) - a.query.startsWith(currentQuery))
+		availableQueries
+			.map((q) => {
+				return { recent: previousSearches.some((p) => p.query == q), query: q };
+			})
+			.filter((q) => (currentQuery == '' ? q.recent : q.query.includes(currentQuery)))
+			.toSorted((a, b) =>
+				currentQuery == ''
+					? b.recent - a.recent
+					: b.query.startsWith(currentQuery) - a.query.startsWith(currentQuery)
+			)
 	);
 
 	function handleSearch(e) {
@@ -52,11 +51,8 @@
 			<div class="prediction-container">
 				{#each searchPredictions as prediction (prediction)}
 					<div class="prediction-card">
-						<button
-							onclick={() => {
-								goto(resolve('/search/' + prediction.query));
-							}}>{prediction.query}</button
-						>
+						<img src={searchIcon} alt="Search Icon" />
+						<button>{prediction.query}</button>
 					</div>
 				{/each}
 			</div>
@@ -155,6 +151,8 @@
 		background-color: rgba(0, 0, 0, 0.2);
 	}
 	.prediction-card {
+		position: relative;
+		display: flex;
 		padding: 10px;
 		border-radius: 5px;
 		border: none;
@@ -165,6 +163,7 @@
 	}
 	.prediction-card button {
 		position: absolute;
+		width: 100%;
 		top: 0;
 		left: 0;
 		width: 100%;
