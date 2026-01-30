@@ -4,7 +4,16 @@ export const ssr = false;
 export const prerender = false;
 
 export async function load({ params, fetch }) {
-	const response = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=100', {
+	const initiialResponse = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=1', {
+		method: 'GET'
+	});
+	if (!initiialResponse.ok) {
+		throw error(initiialResponse.status, { message: initiialResponse.statusText });
+	}
+	const initialData = await initiialResponse.json();
+	const availableCount = initialData.count;
+
+	const response = await fetch('https://pokeapi.co/api/v2/pokemon/?limit=' + availableCount, {
 		method: 'GET'
 	});
 	if (!response.ok) {

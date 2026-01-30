@@ -3,10 +3,11 @@
 	import { resolve } from '$app/paths';
 	import { previousSearches } from '$lib/searchHistory.svelte';
 	import searchIcon from '$lib/assets/search-icon.svg';
+	import recentIcon from '$lib/assets/recent-icon.svg';
 
 	const { data, children } = $props();
 
-	let inputActive = $state(true);
+	let inputActive = $state(false);
 	let currentQuery = $state('');
 	let availableQueries = $state(data.available);
 	let searchPredictions = $derived(
@@ -18,9 +19,13 @@
 			.toSorted((a, b) =>
 				currentQuery == ''
 					? b.recent - a.recent
-					: b.query.startsWith(currentQuery) - a.query.startsWith(currentQuery)
+					: b.query.startsWith(currentQuery) -
+						a.query.startsWith(currentQuery) +
+						0.5 * (b.recent - a.recent)
 			)
+			.slice(0, 10)
 	);
+	[].slice();
 
 	function handleSearch(e) {
 		e.preventDefault();
@@ -50,10 +55,16 @@
 		{#if inputActive && searchPredictions.length > 0}
 			<div class="prediction-container">
 				{#each searchPredictions as prediction (prediction)}
-					<div class="prediction-card">
-						<img src={searchIcon} alt="Search Icon" />
-						<button>{prediction.query}</button>
-					</div>
+					<button
+						type="button"
+						class="prediction-card"
+						onmousedown={() => {
+							goto(resolve('/search/' + prediction.query));
+						}}
+					>
+						<img src={prediction.recent ? recentIcon : searchIcon} alt="Search Icon" />
+						<span>{prediction.query}</span>
+					</button>
 				{/each}
 			</div>
 		{/if}
@@ -144,33 +155,29 @@
 		width: 100%;
 		display: flex;
 		flex-direction: column;
+		align-items: stretch;
 		padding: 5px;
 		gap: 5px;
-		align-self: stretch;
 		border-radius: 10px;
 		background-color: rgba(0, 0, 0, 0.2);
+		backdrop-filter: blur(5px);
 	}
 	.prediction-card {
-		position: relative;
 		display: flex;
-		padding: 10px;
+		padding: 8px;
+		gap: 0.5em;
 		border-radius: 5px;
-		border: none;
 		background-color: rgba(0, 0, 0, 0.3);
-		font: inherit;
-		font-size: 1em;
-		color: white;
-	}
-	.prediction-card button {
-		position: absolute;
-		width: 100%;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: none;
 		border: none;
 		font: inherit;
+		color: white;
+		transition: background-color 0.2s ease;
+	}
+	.prediction-card:hover {
+		background-color: rgba(0, 0, 0, 0.4);
+	}
+	.prediction-card img {
+		width: 1em;
 	}
 
 	footer {

@@ -2,21 +2,26 @@
 	import { globalState } from '$lib/globalState.svelte';
 
 	const { params, data } = $props();
+
+	let pokemon = data.response;
+
+	let sprites = $derived(
+		Object.entries(pokemon.sprites).map((sprite) => {
+			typeof sprite[1] == 'string' ? { img: sprite[1], name: sprite[0] } : null;
+		})
+	);
 </script>
 
-{#await data.response}
-	Loading...
-{:then pokemon}
+{#if pokemon}
 	{(globalState.titleText = params.pokemon ? '' : '')}
 	<h1>{pokemon.name}</h1>
 	<article>
-		{#each Object.entries(pokemon.sprites) as sprite (sprite)}
-			{#if typeof sprite[1] == 'string'}
-				<img src={sprite[1]} alt="Sprite [{sprite[0]}]" />
-			{/if}
+		{#each sprites as sprite (sprite)}
+			<img src={sprite.img} alt="Sprite [{sprite.name}]" />
 		{/each}
 	</article>
-{/await}
+	<div class="image-display"></div>
+{/if}
 
 <style>
 	article {
