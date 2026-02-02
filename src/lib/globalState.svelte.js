@@ -1,3 +1,4 @@
 export let globalState = $state({
-	titleText: ''
+	titleText: '',
+	highestSpriteZ: 1
 });

@@ -4,6 +4,7 @@
 	import { previousSearches } from '$lib/searchHistory.svelte';
 	import searchIcon from '$lib/assets/search-icon.svg';
 	import recentIcon from '$lib/assets/recent-icon.svg';
+	import { globalState } from '$lib/globalState.svelte';
 
 	const { data, children } = $props();
 
@@ -53,7 +54,7 @@
 		/>
 		<button type="submit">Search</button>
 		{#if inputActive && searchPredictions.length > 0}
-			<div class="prediction-container">
+			<div class="prediction-container" style="z-index: {globalState.highestSpriteZ};">
 				{#each searchPredictions as prediction (prediction)}
 					<button
 						type="button"

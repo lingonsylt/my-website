@@ -1,5 +1,7 @@
 <script>
 	import { globalState } from '$lib/globalState.svelte';
+	import chevronLeft from '$lib/assets/chevron-left.svg';
+	import chevronRight from '$lib/assets/chevron-right.svg';
 
 	const { params, data } = $props();
 
@@ -11,6 +13,14 @@
 			.filter((x) => x != null)
 	);
 	let currentSpriteIndex = $state(0);
+	$effect(() => {
+		if (currentSpriteIndex < 0) {
+			currentSpriteIndex = sprites.length - 1;
+		} else if (currentSpriteIndex > sprites.length - 1) {
+			currentSpriteIndex = 0;
+		}
+		globalState.highestSpriteZ = Math.max(sprites.length - currentSpriteIndex);
+	});
 	$inspect(pokemon);
 </script>
 
@@ -24,9 +34,36 @@
 			<p>Weight: {pokemon.weight}kg?</p>
 		</div>
 		<div class="image-display">
-			{#each sprites as sprite, i (sprite)}
-				<img src={sprite.img} alt="Sprite [{sprite.name}]" />
-			{/each}
+			<div class="image-reel">
+				{#each sprites as sprite, i (sprite)}
+					<img
+						class:current={i == currentSpriteIndex}
+						src={sprite.img}
+						alt="Sprite [{sprite.name}]"
+						style="transform: scale({Math.abs(
+							0.9 ** Math.abs(i - currentSpriteIndex)
+						)}) translateX({30 * (i - currentSpriteIndex)}px); z-index: {sprites.length -
+							Math.abs(i - currentSpriteIndex)}; opacity: {100 *
+							0.8 ** Math.abs(i - currentSpriteIndex)}%"
+					/>
+				{/each}
+			</div>
+			<div class="reel-buttons">
+				<button
+					onclick={() => {
+						currentSpriteIndex--;
+					}}
+				>
+					<img src={chevronLeft} alt="" />
+				</button>
+				<button
+					onclick={() => {
+						currentSpriteIndex++;
+					}}
+				>
+					<img src={chevronRight} alt="" />
+				</button>
+			</div>
 		</div>
 	</article>
 {:else}
@@ -38,17 +75,55 @@
 		width: 90%;
 		height: 100%;
 		display: flex;
-		justify-content: space-between;
+		gap: 200px;
 	}
 	.image-display {
-		position: relative;
-		width: 50%;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
 	}
-	.image-display img {
+	.image-reel {
+		position: relative;
+		width: 200px;
+		height: 200px;
+		overflow: hidden;
+	}
+	.image-reel img {
 		position: absolute;
 		width: 200px;
-		background-color: gainsboro;
+		/*transition: tranform 0.2s ease;*/
+	}
+	.current {
+		background-color: rgba(0, 0, 0, 0.4);
 		border-radius: 10px;
-		border: 2px solid black;
+	}
+	.reel-buttons {
+		display: flex;
+		background-color: rgba(0, 0, 0, 0.4);
+		gap: 50px;
+		align-self: center;
+		border-radius: 1em;
+	}
+
+	.reel-buttons button {
+		background: none;
+		border: none;
+		padding: 0;
+		border-radius: 1em;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		transition: background-color 0.2s ease;
+	}
+	.reel-buttons button:hover {
+		background-color: rgba(0, 0, 0, 0.2);
+	}
+	.reel-buttons button:active {
+		background-color: rgba(0, 0, 0, 0.4);
+	}
+
+	.reel-buttons button img {
+		height: 2em;
 	}
 </style>
