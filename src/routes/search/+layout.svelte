@@ -26,7 +26,31 @@
 			)
 			.slice(0, 10)
 	);
-	[].slice();
+	let selectedPredictionIndex = $state(-1);
+	$effect(() => {
+		if (searchPredictions && inputActive) {
+			selectedPredictionIndex = -1;
+		}
+	});
+
+	function handleKeyDown(event) {
+		if (!inputActive || searchPredictions.length == 0) return;
+		switch (event.key) {
+			case 'ArrowDown':
+				selectedPredictionIndex = (selectedPredictionIndex + 1) % searchPredictions.length;
+				break;
+			case 'ArrowUp':
+				selectedPredictionIndex =
+					(selectedPredictionIndex - 1 + searchPredictions.length) % searchPredictions.length;
+				break;
+			case 'Enter':
+				if (selectedPredictionIndex >= 0) {
+					event.preventDefault();
+					const query = searchPredictions[selectedPredictionIndex].query;
+					goto(resolve('/search/' + query));
+				}
+		}
+	}
 
 	function handleSearch(e) {
 		e.preventDefault();
@@ -48,6 +72,7 @@
 				inputActive = false;
 			}}
 			bind:value={currentQuery}
+			onkeydown={handleKeyDown}
 			type="text"
 			name="query"
 			placeholder="Sök upp en pokemon"
@@ -55,12 +80,16 @@
 		<button type="submit">Search</button>
 		{#if inputActive && searchPredictions.length > 0}
 			<div class="prediction-container" style="z-index: {globalState.highestSpriteZ};">
-				{#each searchPredictions as prediction (prediction)}
+				{#each searchPredictions as prediction, i (prediction.query)}
 					<button
 						type="button"
 						class="prediction-card"
+						class:selected={i == selectedPredictionIndex}
 						onmousedown={() => {
 							goto(resolve('/search/' + prediction.query));
+						}}
+						onmouseenter={() => {
+							selectedPredictionIndex = i;
 						}}
 					>
 						<img src={prediction.recent ? recentIcon : searchIcon} alt="Search Icon" />
@@ -174,7 +203,7 @@
 		color: white;
 		transition: background-color 0.2s ease;
 	}
-	.prediction-card:hover {
+	.prediction-card.selected {
 		background-color: rgba(0, 0, 0, 0.4);
 	}
 	.prediction-card img {

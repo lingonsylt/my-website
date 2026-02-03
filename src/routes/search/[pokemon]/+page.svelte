@@ -43,8 +43,7 @@
 						style="transform: scale({Math.abs(
 							0.9 ** Math.abs(i - currentSpriteIndex)
 						)}) translateX({30 * (i - currentSpriteIndex)}px); z-index: {sprites.length -
-							Math.abs(i - currentSpriteIndex)}; opacity: {100 *
-							0.8 ** Math.abs(i - currentSpriteIndex)}%"
+							Math.abs(i - currentSpriteIndex)}; opacity: {0.8 ** Math.abs(i - currentSpriteIndex)}"
 					/>
 				{/each}
 			</div>
@@ -87,15 +86,15 @@
 		width: 200px;
 		height: 200px;
 		overflow: hidden;
+		background-color: rgba(0, 0, 0, 0.4);
+		border-radius: 10px;
 	}
 	.image-reel img {
 		position: absolute;
 		width: 200px;
-		/*transition: tranform 0.2s ease;*/
-	}
-	.current {
-		background-color: rgba(0, 0, 0, 0.4);
-		border-radius: 10px;
+		transition:
+			transform 0.2s ease,
+			opacity 0.2s ease;
 	}
 	.reel-buttons {
 		display: flex;
