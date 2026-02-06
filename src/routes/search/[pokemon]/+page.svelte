@@ -3,7 +3,7 @@
 	import chevronLeft from '$lib/assets/chevron-left.svg';
 	import chevronRight from '$lib/assets/chevron-right.svg';
 
-	const { params, data } = $props();
+	const { data } = $props();
 
 	let pokemon = $derived(data.response);
 
@@ -19,19 +19,24 @@
 		} else if (currentSpriteIndex > sprites.length - 1) {
 			currentSpriteIndex = 0;
 		}
-		globalState.highestSpriteZ = Math.max(sprites.length - currentSpriteIndex);
 	});
-	$inspect(pokemon);
+	$effect(() => {
+		if (pokemon) {
+			globalState.highestSpriteZ = Math.max(sprites.length + 1);
+			currentSpriteIndex = 0;
+		}
+	});
 </script>
 
 {#if pokemon}
-	{(globalState.titleText = params.pokemon ? '' : '')}
 	<h1>{pokemon.name}</h1>
 	<article>
 		<div class="info-container">
 			<h2>{pokemon.name}</h2>
 			<p>ID: {pokemon.id}</p>
-			<p>Weight: {pokemon.weight}kg?</p>
+			<p>Weight: {pokemon.weight}</p>
+			<p>Height: {pokemon.height}</p>
+			<p></p>
 		</div>
 		<div class="image-display">
 			<div class="image-reel">
@@ -75,6 +80,7 @@
 		height: 100%;
 		display: flex;
 		gap: 200px;
+		justify-content: center;
 	}
 	.image-display {
 		display: flex;

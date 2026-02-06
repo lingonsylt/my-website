@@ -1,12 +1,15 @@
 <script>
 	import favicon from '$lib/assets/favicon.svg';
 	import { resolve } from '$app/paths';
-	import { globalState } from '$lib/globalState.svelte';
+	import { page } from '$app/state';
 
 	let { children } = $props();
 
-	let title = $derived((globalState.titleText ? `${globalState.titleText} • ` : '') + 'lingon');
-
+	let title = $derived(
+		page.url.pathname != '/'
+			? page.url.pathname.slice(page.url.pathname.lastIndexOf('/') + 1) + ' • lingon'
+			: 'lingon'
+	);
 	let links = [
 		{
 			name: 'Hem',
