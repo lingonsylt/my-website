@@ -42,6 +42,10 @@
 		{
 			name: 'Search',
 			path: '/search'
+		},
+		{
+			name: 'Projekt 1',
+			path: '/projekt1'
 		}
 	];
 </script>
