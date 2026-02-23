@@ -85,18 +85,19 @@
 
 	onMount(() => {
 		window.addEventListener('keydown', (e) => {
-			console.log(e.key);
 			if (e.key === 'ArrowUp') moveGrid(0, -1);
 			if (e.key === 'ArrowDown') moveGrid(0, 1);
 			if (e.key === 'ArrowLeft') moveGrid(-1, 0);
 			if (e.key === 'ArrowRight') moveGrid(1, 0);
 			if (e.key === ' ' && skillCheckActive) {
-				checkSkillCheck;
+				e.preventDefault();
+				checkSkillCheck();
 			}
 		});
 	});
 
-	const LINE_DURATION = 1000;
+	const LINE_DURATION = 750;
+	const HIT_SIZE = 0.1;
 	let skillCheckActive = $state(false);
 	let linePosition = tweened(0, {
 		duration: LINE_DURATION,
@@ -120,14 +121,14 @@
 	}
 	function checkSkillCheck() {
 		console.log($linePosition);
-		if (0.3 < $linePosition && $linePosition < 0.7) {
+		if (Math.abs(0.5 - $linePosition) <= HIT_SIZE / 2) {
+			skillCheckActive = false;
 			alert('Logged in as' + currentWord);
 		} else {
 			failSkillCheck();
 		}
 	}
 	function failSkillCheck() {
-		alert('You failed');
 		skillCheckActive = false;
 		selectedCells = [];
 		newSeed();
@@ -158,7 +159,7 @@
 {#if skillCheckActive}
 	<div class="skill-check-container">
 		<div class="skill-check">
-			<div class="hit"></div>
+			<div class="hit" style="width: {HIT_SIZE * 100}%;"></div>
 			<div class="line" style="left: {$linePosition * 100}%;"></div>
 		</div>
 	</div>
@@ -221,7 +222,6 @@
 		width: 500px;
 	}
 	.skill-check .hit {
-		width: 50px;
 		background-color: green;
 	}
 	.skill-check .line {
