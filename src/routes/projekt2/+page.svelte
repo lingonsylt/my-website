@@ -1,20 +1,12 @@
 <script>
 	import { onMount } from 'svelte';
-	import {
-		linear,
-		cubicOut,
-		circOut,
-		cubicInOut,
-		circInOut,
-		quadInOut,
-		quadOut
-	} from 'svelte/easing';
+	import { linear, quadInOut, quadOut } from 'svelte/easing';
 	import { Tween } from 'svelte/motion';
 
 	let stones = $state([
 		{
 			id: 0,
-			position: [new Tween(700, { easing: circOut }), new Tween(0, { easing: circOut })],
+			position: [new Tween(700, { easing: quadOut }), new Tween(0, { easing: quadOut })],
 			color: 'blue'
 		}
 	]);
